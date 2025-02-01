@@ -12,9 +12,18 @@ mp_draw = mediapipe.solutions.drawing_utils
 mp_hand = mediapipe.solutions.hands
 
 # implementasikan threadnya agar vidio realtime
-def playaudio(file):
-    threading.Thread(target=playsound.playsound,args=(file,),daemon=True).start()
+audio_event = threading.Event()
 
+def playaudio(file):
+    if not audio_event.is_set():  # Cek apakah audio sedang tidak dimainkan
+        audio_event.set()         # Tandai bahwa audio sedang berjalan
+
+        def play_and_wait():
+            playsound.playsound(file)
+            time.sleep(0)
+            audio_event.clear()
+
+        threading.Thread(target=play_and_wait, daemon=True).start()
 
 
 # untuk menentukan lokasi dimana kita berada -- 13
@@ -23,6 +32,7 @@ response = urlopen(url)
 data = json.load(response)
 
 vidio = cv2.VideoCapture(0)
+vidio.set(cv2.CAP_PROP_FPS, 30)
 vidio.set(cv2.CAP_PROP_FRAME_WIDTH, 870)
 vidio.set(cv2.CAP_PROP_FRAME_HEIGHT, 570)
 # untuk menentukan lokasi dimana kita berada -- 19
@@ -68,11 +78,18 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as 
                 if jariangkat == 1:
                     playaudio("audio/satu.mp3")
                     cv2.putText(frame,str('1'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
-
-                elif jariangkat == 2:
+                if jariangkat == 2:
                     playaudio("audio/dua.mp3")
                     cv2.putText(frame,str('2'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
-
+                if jariangkat == 3:
+                    playaudio("audio/tiga.mp3")
+                    cv2.putText(frame,str('3'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
+                if jariangkat == 4:
+                    playaudio("audio/empat.mp3")
+                    cv2.putText(frame,str('4'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
+                if jariangkat == 5:
+                    playaudio("audio/lima.mp3")
+                    cv2.putText(frame,str('5'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
                 else:
                     cv2.putText(frame,str(jariangkat), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
 
