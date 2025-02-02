@@ -78,16 +78,16 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as 
                 if jariangkat == 1:
                     playaudio("audio/satu.mp3")
                     cv2.putText(frame,str('1'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
-                if jariangkat == 2:
+                elif jariangkat == 2:
                     playaudio("audio/dua.mp3")
                     cv2.putText(frame,str('2'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
-                if jariangkat == 3:
+                elif jariangkat == 3:
                     playaudio("audio/tiga.mp3")
                     cv2.putText(frame,str('3'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
-                if jariangkat == 4:
+                elif jariangkat == 4:
                     playaudio("audio/empat.mp3")
                     cv2.putText(frame,str('4'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
-                if jariangkat == 5:
+                elif jariangkat == 5:
                     playaudio("audio/lima.mp3")
                     cv2.putText(frame,str('5'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
                 else:
