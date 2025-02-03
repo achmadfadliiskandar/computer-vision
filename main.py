@@ -20,7 +20,7 @@ def playaudio(file):
 
         def play_and_wait():
             playsound.playsound(file)
-            time.sleep(0)
+            time.sleep(1)
             audio_event.clear()
 
         threading.Thread(target=play_and_wait, daemon=True).start()
@@ -52,16 +52,8 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as 
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
         if result.multi_hand_landmarks:
-            for hand_landmark in result.multi_hand_landmarks:
-                wrist = hand_landmark.landmark[mp_hand.HandLandmark.WRIST]
-                
-                if wrist.x < 0.5:
-                    warna = (0, 0, 255)  # Merah (BGR)
-                    mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
-                else:
-                    warna = (0,255,0)   # Hijau (BGR)
-                    mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
-
+            # kiri
+            def kiri(hand_landmark,frame,warna):
                 # ambil posisi ujung sendi tangan dan masing2 bawah jari
                 jari_telunjuk = hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_PIP].y
                 jari_tengah = hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_TIP].y <  hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_PIP].y
@@ -72,26 +64,48 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as 
                 ibu_jari_tip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x
                 ibu_jari_ip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
                 jari_jempol = ibu_jari_tip > ibu_jari_ip if wrist.x < 0.5 else ibu_jari_tip < ibu_jari_ip
+                jariangkatkiri = jari_telunjuk + jari_tengah + jari_manis + jari_kelingking + jari_jempol
+                # cv2.putText(frame,str(jariangkatkiri), (325, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
+                return jariangkatkiri
+                            
+            # kanan
+            def kanan(hand_landmark,frame,warna):
+                # ambil posisi ujung sendi tangan dan masing2 bawah jari
+                jari_telunjuk = hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_PIP].y
+                jari_tengah = hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_TIP].y <  hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_PIP].y
+                jari_manis = hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_PIP].y
+                jari_kelingking = hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y
 
-                # Hitung jari yang terangkat/terlihat dividio camera
-                jariangkat = jari_telunjuk + jari_tengah + jari_manis + jari_kelingking + jari_jempol
-                if jariangkat == 1:
-                    playaudio("audio/satu.mp3")
-                    cv2.putText(frame,str('1'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
-                elif jariangkat == 2:
-                    playaudio("audio/dua.mp3")
-                    cv2.putText(frame,str('2'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
-                elif jariangkat == 3:
-                    playaudio("audio/tiga.mp3")
-                    cv2.putText(frame,str('3'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
-                elif jariangkat == 4:
-                    playaudio("audio/empat.mp3")
-                    cv2.putText(frame,str('4'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
-                elif jariangkat == 5:
-                    playaudio("audio/lima.mp3")
-                    cv2.putText(frame,str('5'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
+                # Logika untuk mengecek jempol (x)
+                ibu_jari_tip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x
+                ibu_jari_ip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
+                jari_jempol = ibu_jari_tip > ibu_jari_ip if wrist.x < 0.5 else ibu_jari_tip < ibu_jari_ip
+                jariangkatkanan = jari_telunjuk + jari_tengah + jari_manis + jari_kelingking + jari_jempol
+                # cv2.putText(frame,str(jariangkatkanan), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
+                return jariangkatkanan
+            
+            # menghitung jari kedua tangan
+            jari_kiri = 0
+            jari_kanan = 0
+            for hand_landmark in result.multi_hand_landmarks:
+                wrist = hand_landmark.landmark[mp_hand.HandLandmark.WRIST]
+                
+                if wrist.x < 0.5:
+                    warna = (0, 0, 255)  # Merah (BGR)
+                    mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
+                    jari_kiri += kiri(hand_landmark,frame,warna)
                 else:
-                    cv2.putText(frame,str(jariangkat), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
+                    warna = (0,255,0)   # Hijau (BGR)
+                    mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
+                    jari_kanan += kanan(hand_landmark,frame,warna)
+            # jumlahkan semua tangan dijari(kanan,kiri)
+            cv2.putText(frame, str(jari_kiri), (325, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+            cv2.putText(frame, str("+"), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 215, 255), 2, cv2.LINE_AA)
+            cv2.putText(frame, str(jari_kanan), (377, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+            # menampilkan total tangan yang terangkat dikamera
+            total_jari = jari_kiri + jari_kanan
+            cv2.putText(frame, str(total_jari), (330, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
+
 
 
     # untuk menambahkan waktu dalam camera/vidio-camera
@@ -99,8 +113,8 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as 
         
     # untuk menambahkan teks dalam vidio/camera
         font = cv2.FONT_HERSHEY_SIMPLEX
-        writen = cv2.putText(frame, str(data['city']), (30, 40), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
-        write = cv2.putText(frame, str(waktu), (30, 82), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
+        writen = cv2.putText(frame, str(data['city']), (30, 40), font, 1, (0, 255, 255), 2, cv2.LINE_AA)
+        write = cv2.putText(frame, str(waktu), (30, 82), font, 1, (255, 0, 255), 2, cv2.LINE_AA)
     # untuk menampilkan judul dan frame dari siaran kamera
         cv2.imshow("vidio",frame)
     # untuk menghentikan kamera/siaran
