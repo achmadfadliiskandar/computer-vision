@@ -98,10 +98,13 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as 
                     warna = (0,255,0)   # Hijau (BGR)
                     mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
                     jari_kanan += kanan(hand_landmark,frame,warna)
+            
             # jumlahkan semua tangan dijari(kanan,kiri)
             cv2.putText(frame, str(jari_kiri), (325, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
             cv2.putText(frame, str("+"), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 215, 255), 2, cv2.LINE_AA)
             cv2.putText(frame, str(jari_kanan), (377, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+
+            
             # menampilkan total tangan yang terangkat dikamera
             total_jari = jari_kiri + jari_kanan
             cv2.putText(frame, str(total_jari), (330, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
