@@ -3,28 +3,13 @@ import time
 import json
 from urllib.request import urlopen
 import mediapipe
-import playsound
-import threading
+# import important library
 
 
 # implementasikan mediapipenya
 mp_draw = mediapipe.solutions.drawing_utils
 mp_hand = mediapipe.solutions.hands
-
-# implementasikan threadnya agar vidio realtime
-audio_event = threading.Event()
-
-def playaudio(file):
-    if not audio_event.is_set():  # Cek apakah audio sedang tidak dimainkan
-        audio_event.set()         # Tandai bahwa audio sedang berjalan
-
-        def play_and_wait():
-            playsound.playsound(file)
-            time.sleep(1)
-            audio_event.clear()
-
-        threading.Thread(target=play_and_wait, daemon=True).start()
-
+# implementasikan bentuk tangan dan gambar tanganya
 
 # untuk menentukan lokasi dimana kita berada -- 13
 url = 'http://ipinfo.io/json'
@@ -108,9 +93,7 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as 
             # menampilkan total tangan yang terangkat dikamera
             total_jari = jari_kiri + jari_kanan
             cv2.putText(frame, str(total_jari), (330, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
-
-
-
+            
     # untuk menambahkan waktu dalam camera/vidio-camera
         waktu = time.strftime("%H:%M:%S")
         
