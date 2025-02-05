@@ -1,7 +1,7 @@
 import random
 import speech_recognition as sr
 # judul
-print("Tebak Angka 1-5 SPR")
+print("Tebak Angka 1-5 SPEECH RECOGNITION")
 
 # data angka
 data = {
