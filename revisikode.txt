@@ -243,6 +243,21 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as 
             elif total_jari == 5:
                 playaudio("audio/lima.mp3")
                 cv2.putText(frame, str(total_jari), (330, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
+            elif total_jari == 6:
+                playaudio("audio/enam.mp3")
+                cv2.putText(frame, str(total_jari), (330, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
+            elif total_jari == 7:
+                playaudio("audio/tujuh.mp3")
+                cv2.putText(frame, str(total_jari), (330, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
+            elif total_jari == 8:
+                playaudio("audio/delapan.mp3")
+                cv2.putText(frame, str(total_jari), (330, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
+            elif total_jari == 9:
+                playaudio("audio/sembilan.mp3")
+                cv2.putText(frame, str(total_jari), (330, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
+            elif total_jari == 10:
+                playaudio("audio/sepuluh.mp3")
+                cv2.putText(frame, str(total_jari), (330, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
             else:
                 # playaudio("audio/tiga.mp3")
                 cv2.putText(frame, str(total_jari), (330, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
