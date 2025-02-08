@@ -18,8 +18,8 @@ data = json.load(response)
 
 vidio = cv2.VideoCapture(0)
 vidio.set(cv2.CAP_PROP_FPS, 30)
-vidio.set(cv2.CAP_PROP_FRAME_WIDTH, 870)
-vidio.set(cv2.CAP_PROP_FRAME_HEIGHT, 570)
+vidio.set(cv2.CAP_PROP_FRAME_WIDTH, 1000)
+vidio.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
 # untuk menentukan lokasi dimana kita berada -- 19
 
 # melakukan pendeteksian kamera untuk tangan yang berada di kamera
