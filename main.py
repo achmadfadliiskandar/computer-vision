@@ -22,6 +22,40 @@ vidio.set(cv2.CAP_PROP_FRAME_WIDTH, 1000)
 vidio.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
 # untuk menentukan lokasi dimana kita berada -- 19
 
+# fungsi untuk menyimpan jari setiap tangan 25
+# kiri
+def kiri(hand_landmark):
+    # ambil posisi ujung sendi tangan dan masing2 bawah jari
+    jari_telunjuk = hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_PIP].y
+    jari_tengah = hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_TIP].y <  hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_PIP].y
+    jari_manis = hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_PIP].y
+    jari_kelingking = hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y
+
+    # Logika untuk mengecek jempol (x)
+    ibu_jari_tip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x
+    ibu_jari_ip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
+    jari_jempol = ibu_jari_tip > ibu_jari_ip if wrist.x < 0.5 else ibu_jari_tip < ibu_jari_ip
+    jariangkatkiri = jari_telunjuk + jari_tengah + jari_manis + jari_kelingking + jari_jempol
+    # cv2.putText(frame,str(jariangkatkiri), (325, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
+    return jariangkatkiri
+                
+# kanan
+def kanan(hand_landmark):
+    # ambil posisi ujung sendi tangan dan masing2 bawah jari
+    jari_telunjuk = hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_PIP].y
+    jari_tengah = hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_TIP].y <  hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_PIP].y
+    jari_manis = hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_PIP].y
+    jari_kelingking = hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y
+
+    # Logika untuk mengecek jempol (x)
+    ibu_jari_tip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x
+    ibu_jari_ip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
+    jari_jempol = ibu_jari_tip > ibu_jari_ip if wrist.x < 0.5 else ibu_jari_tip < ibu_jari_ip
+    jariangkatkanan = jari_telunjuk + jari_tengah + jari_manis + jari_kelingking + jari_jempol
+    # cv2.putText(frame,str(jariangkatkanan), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
+    return jariangkatkanan   
+# fungsi untuk menyimpan jari setiap tangan 57 
+
 # melakukan pendeteksian kamera untuk tangan yang berada di kamera
 with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as hands:
 # untuk melakukan siaran vidio secara langsung
@@ -37,38 +71,6 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as 
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
         if result.multi_hand_landmarks:
-            # kiri
-            def kiri(hand_landmark,frame,warna):
-                # ambil posisi ujung sendi tangan dan masing2 bawah jari
-                jari_telunjuk = hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_PIP].y
-                jari_tengah = hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_TIP].y <  hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_PIP].y
-                jari_manis = hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_PIP].y
-                jari_kelingking = hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y
-
-                # Logika untuk mengecek jempol (x)
-                ibu_jari_tip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x
-                ibu_jari_ip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
-                jari_jempol = ibu_jari_tip > ibu_jari_ip if wrist.x < 0.5 else ibu_jari_tip < ibu_jari_ip
-                jariangkatkiri = jari_telunjuk + jari_tengah + jari_manis + jari_kelingking + jari_jempol
-                # cv2.putText(frame,str(jariangkatkiri), (325, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
-                return jariangkatkiri
-                            
-            # kanan
-            def kanan(hand_landmark,frame,warna):
-                # ambil posisi ujung sendi tangan dan masing2 bawah jari
-                jari_telunjuk = hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_PIP].y
-                jari_tengah = hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_TIP].y <  hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_PIP].y
-                jari_manis = hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_PIP].y
-                jari_kelingking = hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y
-
-                # Logika untuk mengecek jempol (x)
-                ibu_jari_tip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x
-                ibu_jari_ip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
-                jari_jempol = ibu_jari_tip > ibu_jari_ip if wrist.x < 0.5 else ibu_jari_tip < ibu_jari_ip
-                jariangkatkanan = jari_telunjuk + jari_tengah + jari_manis + jari_kelingking + jari_jempol
-                # cv2.putText(frame,str(jariangkatkanan), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
-                return jariangkatkanan
-            
             # menghitung jari kedua tangan
             jari_kiri = 0
             jari_kanan = 0
