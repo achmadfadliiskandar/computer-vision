@@ -1,43 +1,27 @@
+import cv2
 import random
-import speech_recognition as sr
-# judul
-print("Tebak Angka 1-5 SPEECH RECOGNITION")
 
-# data angka
-data = {
-    "satu":1,
-    "dua":2,
-    "tiga":3,
-    "empat":4,
-    "lima":5
-}
-# print(data)
-# print(random.choice(data))
-kata_acak,datarandoms = random.choice(list(data.items()))
+vidio = cv2.VideoCapture(0)
 
-
-# membuat recognize
-recognizer = sr.Recognizer()
-
-# merekam audio input dari microphone
-with sr.Microphone() as source:
-    print(datarandoms)
-    print("tebak angka : ")
-    recognizer.adjust_for_ambient_noise(source)
-    audio_data = recognizer.listen(source,timeout=5)
+data_gambar = ['images/satu.jpeg','images/dua.jpeg','images/tiga.jpeg','images/empat.jpeg','images/lima.jpeg']
+# data = [5,2,10,4,1]
+gambar_random = cv2.imread(random.choice(data_gambar))
 
 while True:
-    try:
-        # datarandoms = random.choice(data)
-        masukan = recognizer.recognize_google(audio_data,language="id-ID").lower()
-        print("omongan anda : ",masukan)
-        if masukan == kata_acak or masukan == str(datarandoms):
-            print("anda benar")
-            break
-        else:
-            print("anda salah ")
-            break
-    except sr.UnknownValueError:
-        print("Maaf Suara Tidak Dikenali")
-    except sr.RequestError as e:
-        print("Terjadi kesalahan dalam pengenalan suara")
+    ret,frame = vidio.read()
+    if not ret:
+        break
+
+    frame = cv2.flip(frame , 1)
+    ukuran_gambar = cv2.resize(gambar_random,(200,100))
+    tinggi,lebar,_ = gambar_random.shape
+
+    y_offset,x_offset = 10,frame.shape[1] -210
+    frame[y_offset:y_offset + 100,x_offset:x_offset + 200] = ukuran_gambar
+
+    cv2.imshow("Tebak Angka 1-10",frame)
+    if cv2.waitKey(1) ==  ord('x'):
+        break
+
+vidio.release()
+cv2.destroyAllWindows()

@@ -32,7 +32,7 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
 
         if result.multi_hand_landmarks and result.multi_handedness:
             for hand_landmark, handedness in zip(result.multi_hand_landmarks, result.multi_handedness):
-                label = handedness.classification[0].label.lower()  # 'left' atau 'right'
+                label = handedness.classification[0].label.lower()  # 'left' atau 'right' / kiri' atau 'kanan' 
 
                 if (pilihan_tangan == 'kanan' and label == 'right') or (pilihan_tangan == 'kiri' and label == 'left'):
                     wrist = hand_landmark.landmark[mp_hand.HandLandmark.WRIST]
@@ -78,6 +78,8 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
                             frame, hand_landmark, mp_hand.HAND_CONNECTIONS,
                             landmark_drawing_spec=mp_draw.DrawingSpec(color=warna, thickness=2, circle_radius=4)
                         )
+                elif (pilihan_tangan not in ['kanan','kiri']) or (pilihan_tangan == 'kanan' not in label == 'right') and (pilihan_tangan == 'kiri' not in label == 'left'):
+                    cv2.putText(frame,str('salah input ya!!'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2, cv2.LINE_AA)
 
         waktu = time.strftime("%H:%M:%S")
         font = cv2.FONT_HERSHEY_SIMPLEX
