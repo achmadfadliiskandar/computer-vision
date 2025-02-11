@@ -80,11 +80,11 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as 
                 if wrist.x < 0.5:
                     warna = (0, 0, 255)  # Merah (BGR)
                     mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
-                    jari_kiri += kiri(hand_landmark,frame,warna)
+                    jari_kiri += kiri(hand_landmark)
                 else:
                     warna = (0,255,0)   # Hijau (BGR)
                     mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
-                    jari_kanan += kanan(hand_landmark,frame,warna)
+                    jari_kanan += kanan(hand_landmark)
             
             # jumlahkan semua tangan dijari(kanan,kiri)
             cv2.putText(frame, str(jari_kiri), (325, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
