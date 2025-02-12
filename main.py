@@ -15,14 +15,16 @@ mp_hand = mediapipe.solutions.hands
 url = 'http://ipinfo.io/json'
 response = urlopen(url)
 data = json.load(response)
+# untuk menentukan lokasi dimana kita berada -- 18
 
+# untuk mengkonfigurasi tampilan vidio -- 20
 vidio = cv2.VideoCapture(0)
 vidio.set(cv2.CAP_PROP_FPS, 30)
 vidio.set(cv2.CAP_PROP_FRAME_WIDTH, 1000)
 vidio.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
-# untuk menentukan lokasi dimana kita berada -- 19
+# untuk mengkonfigurasi tampilan vidio -- 25
 
-# fungsi untuk menyimpan jari setiap tangan 25
+# fungsi untuk menyimpan jari setiap tangan 27
 # kiri
 def kiri(hand_landmark):
     # ambil posisi ujung sendi tangan dan masing2 bawah jari
