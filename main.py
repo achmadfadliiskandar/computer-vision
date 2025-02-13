@@ -25,7 +25,7 @@ vidio.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
 # untuk mengkonfigurasi tampilan vidio -- 25
 
 # fungsi untuk menyimpan jari setiap tangan 27
-# kiri
+# tangan kiri
 def kiri(hand_landmark):
     # ambil posisi ujung sendi tangan dan masing2 bawah jari
     jari_telunjuk = hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_PIP].y
@@ -41,7 +41,7 @@ def kiri(hand_landmark):
     # cv2.putText(frame,str(jariangkatkiri), (325, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
     return jariangkatkiri
                 
-# kanan
+# tangan kanan
 def kanan(hand_landmark):
     # ambil posisi ujung sendi tangan dan masing2 bawah jari
     jari_telunjuk = hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_PIP].y
@@ -56,10 +56,10 @@ def kanan(hand_landmark):
     jariangkatkanan = jari_telunjuk + jari_tengah + jari_manis + jari_kelingking + jari_jempol
     # cv2.putText(frame,str(jariangkatkanan), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
     return jariangkatkanan   
-# fungsi untuk menyimpan jari setiap tangan 57 
+# fungsi untuk menyimpan jari setiap tangan 59
 
-# melakukan pendeteksian kamera untuk tangan yang berada di kamera
-with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as hands:
+# menginisialisasi tangan untuk deteksi serta pelacakan 61
+with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5,max_num_hands=2,model_complexity=1) as hands:
 # untuk melakukan siaran vidio secara langsung
     while True:
         ret,frame = vidio.read()
