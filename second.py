@@ -60,6 +60,21 @@ def kanan(hand_landmark):
 
 # menginisialisasi tangan untuk deteksi serta pelacakan 61
 with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5,max_num_hands=2,model_complexity=1) as hands:
+    simbol = {
+        "tambah":"+",
+        "kali":"*",
+        "kurang":"-",
+        "bagi":"/"
+    }
+
+    # Meminta pengguna memilih simbol
+    while True:
+        simbol_input = input("Masukkan simbol yang diinginkan (+, -, *, /): ")
+        if simbol_input in simbol.values():
+            simbol_active = simbol_input
+            break
+        else:
+            print("Simbol tidak valid, silakan coba lagi.")
 # untuk melakukan siaran vidio secara langsung
     while True:
         ret,frame = vidio.read()
@@ -76,13 +91,7 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5,max_
             # menghitung jari kedua tangan
             jari_kiri = 0
             jari_kanan = 0
-            simbol = {
-                "tambah":"+",
-                "kali":"*",
-                "kurang":"-",
-                "bagi":"/"
-            }
-            simbol_active = simbol["kurang"]
+
             for hand_landmark in result.multi_hand_landmarks:
                 wrist = hand_landmark.landmark[mp_hand.HandLandmark.WRIST]
                 
