@@ -66,7 +66,7 @@ simbol = {
         "kurang":"-",
         "bagi":"/"
 }
- # Meminta pengguna memilih simbol
+ # Meminta input pengguna memilih simbol
 simbol_input = input("Masukkan simbol yang diinginkan (+, -, *, /): ")
 
 # menginisialisasi tangan untuk deteksi serta pelacakan 61
