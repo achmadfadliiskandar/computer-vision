@@ -58,29 +58,29 @@ def kanan(hand_landmark):
     return jariangkatkanan   
 # fungsi untuk menyimpan jari setiap tangan 59
 
-# menginisialisasi tangan untuk deteksi serta pelacakan 61
-with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5,max_num_hands=2,model_complexity=1) as hands:
-    simbol = {
+
+# membuat input terlebih dahulu
+simbol = {
         "tambah":"+",
         "kali":"*",
         "kurang":"-",
         "bagi":"/"
-    }
+}
+ # Meminta pengguna memilih simbol
+simbol_input = input("Masukkan simbol yang diinginkan (+, -, *, /): ")
 
-    # Meminta pengguna memilih simbol
-    while True:
-        simbol_input = input("Masukkan simbol yang diinginkan (+, -, *, /): ")
-        if simbol_input in simbol.values():
-            simbol_active = simbol_input
-            break
-        else:
-            print("Simbol tidak valid, silakan coba lagi.")
+# menginisialisasi tangan untuk deteksi serta pelacakan 61
+with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5,max_num_hands=2,model_complexity=1) as hands:
 # untuk melakukan siaran vidio secara langsung
     while True:
         ret,frame = vidio.read()
         if not ret:
             break
-
+        if simbol_input in simbol.values():
+            simbol_active = simbol_input
+        else:
+            print("Simbol tidak valid, silakan coba lagi.")
+            break
         frame = cv2.flip(frame,1)
 
         frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
