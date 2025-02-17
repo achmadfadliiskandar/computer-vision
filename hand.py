@@ -32,18 +32,22 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as 
 
         frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
         result = hands.process(frame)
-        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        # frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
         if result.multi_hand_landmarks:
-            for hand_landmark in result.multi_hand_landmarks:
-                wrist = hand_landmark.landmark[mp_hand.HandLandmark.WRIST]
-                
-                if wrist.x < 0.5:
-                    warna = (0, 0, 255)  # Merah (BGR)
-                    mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
-                else:
-                    warna = (0,255,0)   # Hijau (BGR)
-                    mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
+            if len(result.multi_handedness) == 2:
+                cv2.putText(frame, 'Kedua tangan diangkat',(250, 50),cv2.FONT_HERSHEY_COMPLEX, 0.9, (255, 0, 0), 2) 
+            else:
+                for idx,hand_landmark in enumerate(result.multi_hand_landmarks):
+                    label = result.multi_handedness[idx].classification[0].label
+                    if label == "Left":
+                        warna = (0, 0, 255)  # Merah (BGR)
+                        cv2.putText(frame, 'Tangan Kiri',(250, 50),cv2.FONT_HERSHEY_COMPLEX, 0.9, warna, 2)
+                        mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
+                    else:
+                        cv2.putText(frame, 'Tangan Kanan',(250, 50),cv2.FONT_HERSHEY_COMPLEX, 0.9, warna, 2)
+                        warna = (0,255,0)   # Hijau (BGR)
+                        mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
     # untuk menambahkan waktu dalam camera/vidio-camera
         waktu = time.strftime("%H:%M:%S")
         

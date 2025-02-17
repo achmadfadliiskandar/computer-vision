@@ -28,7 +28,7 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
         frame = cv2.flip(frame, 1)
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         result = hands.process(frame_rgb)
-        frame = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
+
 
         if result.multi_hand_landmarks and result.multi_handedness:
             for hand_landmark, handedness in zip(result.multi_hand_landmarks, result.multi_handedness):
@@ -37,7 +37,7 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
                 if (pilihan_tangan == 'kanan' and label == 'right') or (pilihan_tangan == 'kiri' and label == 'left'):
                     wrist = hand_landmark.landmark[mp_hand.HandLandmark.WRIST]
 
-                    if wrist.x < 0.5:
+                    if label == "left":
                         warna = (0, 0, 255)  # Merah (BGR)
                         # ambil posisi ujung sendi tangan dan masing2 bawah jari
                         jari_telunjuk = hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_PIP].y
@@ -46,9 +46,7 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
                         jari_kelingking = hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y
 
                         # Logika untuk mengecek jempol (x)
-                        ibu_jari_tip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x
-                        ibu_jari_ip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
-                        jari_jempol = ibu_jari_tip > ibu_jari_ip if wrist.x < 0.5 else ibu_jari_tip < ibu_jari_ip
+                        jari_jempol = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x > hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
 
                         # Hitung jari yang terangkat/terlihat dividio camera
                         jariangkat = jari_telunjuk + jari_tengah + jari_manis + jari_kelingking + jari_jempol
@@ -66,9 +64,7 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
                         jari_kelingking = hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y
 
                         # Logika untuk mengecek jempol (x)
-                        ibu_jari_tip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x
-                        ibu_jari_ip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
-                        jari_jempol = ibu_jari_tip > ibu_jari_ip if wrist.x < 0.5 else ibu_jari_tip < ibu_jari_ip
+                        jari_jempol = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x < hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
 
                         # Hitung jari yang terangkat/terlihat dividio camera
                         jariangkat = jari_telunjuk + jari_tengah + jari_manis + jari_kelingking + jari_jempol
@@ -79,7 +75,7 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
                             landmark_drawing_spec=mp_draw.DrawingSpec(color=warna, thickness=2, circle_radius=4)
                         )
                 elif (pilihan_tangan not in ['kanan','kiri']) or (pilihan_tangan == 'kanan' not in label == 'right') and (pilihan_tangan == 'kiri' not in label == 'left'):
-                    cv2.putText(frame,str('salah input ya!!'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2, cv2.LINE_AA)
+                    cv2.putText(frame,str('salah input ya!! Silahkan Keluar'), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2, cv2.LINE_AA)
 
         waktu = time.strftime("%H:%M:%S")
         font = cv2.FONT_HERSHEY_SIMPLEX
