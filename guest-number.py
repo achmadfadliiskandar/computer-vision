@@ -18,14 +18,12 @@ def hitung_jari(hand_landmark):
     jari_tengah = hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_PIP].y
     jari_manis = hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_PIP].y
     jari_kelingking = hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y
-    ibu_jari_tip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x
-    ibu_jari_ip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
-    jari_jempol = ibu_jari_tip > ibu_jari_ip
-
+    jari_jempol = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x > hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
+    
     jumlah_jari = sum([jari_telunjuk,jari_tengah,jari_manis,jari_kelingking,jari_jempol])
     return jumlah_jari
 
-with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5) as hands:
+with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5,max_num_hands=1) as hands:
     while True:
         ret,frame = vidio.read()
         if not ret:
