@@ -32,13 +32,10 @@ def kiri(hand_landmark):
     jari_tengah = hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_TIP].y <  hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_PIP].y
     jari_manis = hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_PIP].y
     jari_kelingking = hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y
-
-    # Logika untuk mengecek jempol (x)
-    ibu_jari_tip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x
-    ibu_jari_ip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
-    jari_jempol = ibu_jari_tip > ibu_jari_ip if wrist.x < 0.5 else ibu_jari_tip < ibu_jari_ip
+    jari_jempol = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x > hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
+    # hitung semua jari kiri yang terangkat ke kamera
     jariangkatkiri = jari_telunjuk + jari_tengah + jari_manis + jari_kelingking + jari_jempol
-    # cv2.putText(frame,str(jariangkatkiri), (325, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
+    # kembalikan variabel jari angkat kiri dengan return
     return jariangkatkiri
                 
 # tangan kanan
@@ -48,15 +45,12 @@ def kanan(hand_landmark):
     jari_tengah = hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_TIP].y <  hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_PIP].y
     jari_manis = hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_PIP].y
     jari_kelingking = hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y
-
-    # Logika untuk mengecek jempol (x)
-    ibu_jari_tip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x
-    ibu_jari_ip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
-    jari_jempol = ibu_jari_tip > ibu_jari_ip if wrist.x < 0.5 else ibu_jari_tip < ibu_jari_ip
+    jari_jempol = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x < hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
+    # hitung semua jari kanan yang terangkat ke kamera
     jariangkatkanan = jari_telunjuk + jari_tengah + jari_manis + jari_kelingking + jari_jempol
-    # cv2.putText(frame,str(jariangkatkanan), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, warna, 2, cv2.LINE_AA)
+    # kembalikan variabel jari angkat kanan dengan return
     return jariangkatkanan   
-# fungsi untuk menyimpan jari setiap tangan 59
+# fungsi untuk menyimpan jari setiap tangan 53
 
 # menginisialisasi tangan untuk deteksi serta pelacakan 61
 with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5,max_num_hands=2,model_complexity=1) as hands:
@@ -71,15 +65,14 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5,max_
         frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
         result = hands.process(frame)
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-
-        if result.multi_hand_landmarks:
-            # menghitung jari kedua tangan
-            jari_kiri = 0
-            jari_kanan = 0
-            for hand_landmark in result.multi_hand_landmarks:
-                wrist = hand_landmark.landmark[mp_hand.HandLandmark.WRIST]
+        # menghitung jari kedua tangan
+        jari_kiri = 0
+        jari_kanan = 0
+        if result.multi_hand_landmarks and result.multi_handedness:
+            for i,hand_landmark in enumerate(result.multi_hand_landmarks):
+                wrist = result.multi_handedness[i].classification[0].label
                 
-                if wrist.x < 0.5:
+                if wrist == "Left":
                     warna = (0, 0, 255)  # Merah (BGR)
                     mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
                     jari_kiri += kiri(hand_landmark)
