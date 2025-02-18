@@ -19,7 +19,7 @@ data = json.load(response)
 
 # untuk mengkonfigurasi tampilan vidio -- 20
 vidio = cv2.VideoCapture(0)
-vidio.set(cv2.CAP_PROP_FPS, 30)
+vidio.set(cv2.CAP_PROP_FPS, 50)
 vidio.set(cv2.CAP_PROP_FRAME_WIDTH, 1000)
 vidio.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
 # untuk mengkonfigurasi tampilan vidio -- 25
