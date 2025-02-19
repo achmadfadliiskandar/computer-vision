@@ -10,14 +10,10 @@ mp_hand = mp.solutions.hands
 # Fungsi untuk menentukan jumlah jari yang terangkat
 def hitung_jarikiri(hand_landmark):
     jari = [
-        hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_TIP].y <
-        hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_PIP].y,
-        hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_TIP].y <
-        hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_PIP].y,
-        hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_TIP].y <
-        hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_PIP].y,
-        hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y <
-        hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y,
+        hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_PIP].y,
+        hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_PIP].y,
+        hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_PIP].y,
+        hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y,
     ]
     ibu_jari_tip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x
     ibu_jari_ip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
@@ -25,14 +21,10 @@ def hitung_jarikiri(hand_landmark):
     return sum(jari)
 def hitung_jarikanan(hand_landmark):
     jari = [
-        hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_TIP].y <
-        hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_PIP].y,
-        hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_TIP].y <
-        hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_PIP].y,
-        hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_TIP].y <
-        hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_PIP].y,
-        hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y <
-        hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y,
+        hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.INDEX_FINGER_PIP].y,
+        hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.MIDDLE_FINGER_PIP].y,
+        hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.RING_FINGER_PIP].y,
+        hand_landmark.landmark[mp_hand.HandLandmark.PINKY_TIP].y < hand_landmark.landmark[mp_hand.HandLandmark.PINKY_PIP].y,
     ]
     ibu_jari_tip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_TIP].x
     ibu_jari_ip = hand_landmark.landmark[mp_hand.HandLandmark.THUMB_IP].x
@@ -58,8 +50,7 @@ def run_hand_tracking():
                 for hand_landmark in result.multi_hand_landmarks:
                     wrist_x = hand_landmark.landmark[mp_hand.HandLandmark.WRIST].x
                     warna = (0, 0, 255) if wrist_x < 0.5 else (0, 255, 0)
-                    mp_draw.draw_landmarks(frame, hand_landmark, mp_hand.HAND_CONNECTIONS,
-                                           landmark_drawing_spec=mp_draw.DrawingSpec(warna))
+                    mp_draw.draw_landmarks(frame, hand_landmark, mp_hand.HAND_CONNECTIONS,landmark_drawing_spec=mp_draw.DrawingSpec(warna))
                     if wrist_x < 0.5:
                         jari_kiri += hitung_jarikiri(hand_landmark)
                     else:
@@ -87,7 +78,7 @@ def run_hand_tracking():
 
 # GUI Tkinter
 root = tk.Tk()
-root.title("Hand Tracking Calculator")
+root.title("Hand Tracking Calculator 1-5")
 root.geometry("300x200")
 
 simbol_input = StringVar()

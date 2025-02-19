@@ -3,7 +3,7 @@ import time
 import json
 from urllib.request import urlopen
 import mediapipe
-# import important library
+# import library penting
 
 
 # implementasikan mediapipenya
