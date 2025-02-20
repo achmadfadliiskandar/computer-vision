@@ -44,7 +44,8 @@ def run_hand_tracking():
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             result = hands.process(frame)
             frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-            jari_kiri, jari_kanan = 0, 0
+            jari_kiri = 0
+            jari_kanan = 0
             
             if result.multi_hand_landmarks:
                 for hand_landmark in result.multi_hand_landmarks:
