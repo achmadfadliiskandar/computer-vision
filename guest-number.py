@@ -41,7 +41,9 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5,max_
                 handedness = result.multi_handedness[i].classification[0].label
                 # print(hand_landmark)
                 if handedness == "Left":
+                    warna = (0,0,255)
                     jumlahjari = hitung_jari(hand_landmark)
+                    mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
                     print(f"Jumlah jari: {jumlahjari} | Target: {acak_gambar + 1}")
                     if jumlahjari == acak_gambar + 1:
                         acak_gambar = random.randint(0,4)
