@@ -37,14 +37,17 @@ with mp_hand.Hands(min_detection_confidence=0.5,min_tracking_confidence=0.5,max_
 
         if result.multi_hand_landmarks:
             # print(result.multi_hand_landmarks)
-            for hand_landmark in result.multi_hand_landmarks:
+            for i,hand_landmark in enumerate(result.multi_hand_landmarks):
+                handedness = result.multi_handedness[i].classification[0].label
                 # print(hand_landmark)
-                jumlahjari = hitung_jari(hand_landmark)
-                print(f"Jumlah jari: {jumlahjari} | Target: {acak_gambar + 1}")
-
-                if jumlahjari == acak_gambar + 1:
-                    acak_gambar = random.randint(0,4)
-                    gambar_random = cv2.imread(data_gambar[acak_gambar])
+                if handedness == "Left":
+                    jumlahjari = hitung_jari(hand_landmark)
+                    print(f"Jumlah jari: {jumlahjari} | Target: {acak_gambar + 1}")
+                    if jumlahjari == acak_gambar + 1:
+                        acak_gambar = random.randint(0,4)
+                        gambar_random = cv2.imread(data_gambar[acak_gambar])
+                else:
+                    print("tangan tidak sesuai")
 
         # untuk ukuran gambar dari folder images/asset gambar angka
         ukuran_gambar = cv2.resize(gambar_random,(200,100))
