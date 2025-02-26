@@ -86,6 +86,7 @@ def startcameras():
 
             cv2.imshow("Tebak Angka 1-5",frame)
             if cv2.waitKey(1) ==  ord('x'):
+                root.quit()
                 break
 
     vidio.release()
