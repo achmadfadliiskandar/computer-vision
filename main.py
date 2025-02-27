@@ -99,7 +99,7 @@ with mp_hand.Hands(min_detection_confidence=0.75,min_tracking_confidence=0.75,ma
         writen = cv2.putText(frame, str(data['city']), (30, 40), font, 1, (0, 255, 255), 2, cv2.LINE_AA)
         write = cv2.putText(frame, str(waktu), (30, 82), font, 1, (255, 0, 255), 2, cv2.LINE_AA)
     # untuk menampilkan judul dan frame dari siaran kamera
-        cv2.imshow("vidio",frame)
+        cv2.imshow("Kamera Deteksi Jari Tangan",frame)
     # untuk menghentikan kamera/siaran
         if cv2.waitKey(1) == ord('q'):
             break
