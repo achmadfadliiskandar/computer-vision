@@ -53,7 +53,7 @@ def kanan(hand_landmark):
 # fungsi untuk menyimpan jari setiap tangan 53
 
 # menginisialisasi tangan untuk deteksi serta pelacakan 55
-with mp_hand.Hands(min_detection_confidence=0.75,min_tracking_confidence=0.75,max_num_hands=2,model_complexity=1) as hands:
+with mp_hand.Hands(min_detection_confidence=0.80,min_tracking_confidence=0.80,max_num_hands=2,model_complexity=1) as hands:
 # untuk melakukan siaran vidio secara langsung
     while True:
         ret,frame = vidio.read()
