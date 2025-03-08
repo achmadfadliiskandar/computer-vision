@@ -69,8 +69,11 @@ def run_hand_tracking():
             else:
                 total = "?"
             
-            cv2.putText(frame, f"{jari_kiri} {operasi} {jari_kanan} = {total}", (30, 50),
-                        cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
+            # cv2.putText(frame, f"{jari_kiri} {operasi} {jari_kanan} = {total}", (30, 50),cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
+            cv2.putText(frame, str(jari_kiri), (325, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+            cv2.putText(frame, str(operasi), (350, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 215, 255), 2, cv2.LINE_AA)
+            cv2.putText(frame, str(jari_kanan), (377, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+            cv2.putText(frame, str(total), (330, 150),cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 165, 0), 2, cv2.LINE_AA)
             cv2.imshow("Hand Tracking", frame)
             if cv2.waitKey(1) == ord('q'):
                 break
