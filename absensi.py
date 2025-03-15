@@ -8,7 +8,7 @@ datakaryawan = {
 }
 
 # Contoh akses data
-# print(datakaryawan['Fadli'])
+# print(datakaryawan['50422069'])
 
 # masukin input
 dataisi = str(getpass.getpass(prompt='Masukan Data Karyawan : '))
