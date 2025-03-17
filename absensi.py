@@ -4,7 +4,8 @@ print("Absensi Python")
 datakaryawan = {
     "Nabil": {"NPM": "51422186", "kelas": "3IA13"},
     "Fadli": {"NPM": "50422069", "kelas": "3IA13"},
-    "Adrian": {"NPM": "50422102", "kelas": "3IA13"}
+    "Adrian": {"NPM": "50422102", "kelas": "3IA13"},
+    "Wisnu": {"NPM": "51422635", "kelas": "3IA19"},
 }
 
 # Contoh akses data
