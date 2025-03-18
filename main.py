@@ -1,8 +1,10 @@
 import cv2
-import time
+# import library waktu
 import json
 from urllib.request import urlopen
+from datetime import datetime
 import mediapipe
+import pytz
 # import library penting
 
 
@@ -92,7 +94,9 @@ with mp_hand.Hands(min_detection_confidence=0.80,min_tracking_confidence=0.80,ma
             cv2.putText(frame, str(total_jari), (330, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
             
     # untuk menambahkan waktu dalam camera/vidio-camera
-        waktu = time.strftime("%H:%M:%S")
+        timezone = data.get("timezone","UTC")
+        tz = pytz.timezone(timezone)
+        waktu = datetime.now(tz).strftime("%H:%M:%S")
         
     # untuk menambahkan teks dalam vidio/camera
         font = cv2.FONT_HERSHEY_SIMPLEX
