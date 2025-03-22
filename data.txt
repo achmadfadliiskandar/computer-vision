@@ -1,0 +1,4 @@
+Nabil - NPM: 51422186, Kelas: 3IA13, Status: tidak_hadir
+Fadli - NPM: 50422069, Kelas: 3IA13, Status: hadir
+Adrian - NPM: 50422102, Kelas: 3IA13, Status: tidak_hadir
+Wisnu - NPM: 51422635, Kelas: 3IA19, Status: hadir
