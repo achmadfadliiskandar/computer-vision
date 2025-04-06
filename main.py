@@ -76,11 +76,11 @@ with mp_hand.Hands(min_detection_confidence=0.80,min_tracking_confidence=0.80,ma
                 
                 if wrist == "Left":
                     warna = (0, 0, 255)  # Merah (BGR)
-                    mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
+                    mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna,thickness=5))
                     jari_kiri += kiri(hand_landmark)
                 else:
                     warna = (0,255,0)   # Hijau (BGR)
-                    mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna))
+                    mp_draw.draw_landmarks(frame,hand_landmark,mp_hand.HAND_CONNECTIONS,landmark_drawing_spec = mp_draw.DrawingSpec(warna,thickness=5))
                     jari_kanan += kanan(hand_landmark)
             
             # jumlahkan semua tangan dijari(kanan,kiri)
