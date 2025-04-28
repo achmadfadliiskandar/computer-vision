@@ -1,6 +1,7 @@
 import pandas as pd
 import random
 import os
+import datetime
 
 # Jumlah data dummy yang ingin ditambahkan
 jumlah_data = 10
@@ -14,7 +15,9 @@ for _ in range(jumlah_data):
         else "menguasai" if skor == 3
         else "sangat menguasai"
     )
-    data_dummy.append({"skor": skor, "keterangan": keterangan})
+    waktu = datetime.datetime.now()
+    get_waktu = (waktu.strftime("%X"))
+    data_dummy.append({"skor": skor, "keterangan": keterangan,"waktu":get_waktu})
 
 # Buat DataFrame dari data dummy
 df_dummy = pd.DataFrame(data_dummy)

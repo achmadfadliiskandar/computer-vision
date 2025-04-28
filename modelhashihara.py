@@ -71,7 +71,7 @@ for index, row in data.iterrows():
     waktu_akurasi = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     # Mendapatkan waktu_userinp dari data.csv
-    waktu_userinp = row.get("waktu_userinp", "Tidak Tersedia")  # Mengambil waktu_userinp dari data.csv
+    waktu_userinp = row.get("waktu", "Tidak Tersedia")  # Mengambil waktu_userinp dari data.csv
 
     # Menambahkan hasil ke dalam list
     results.append({
