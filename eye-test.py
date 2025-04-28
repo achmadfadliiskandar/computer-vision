@@ -5,6 +5,7 @@ import random
 from tkinter import messagebox
 import csv
 from tabulate import tabulate
+import datetime
 
 # Tampilkan angka point(skor) jika benar
 jumlah_soal = 0
@@ -66,8 +67,11 @@ def cek_jawaban():
         keterangan = "kurang menguasai" if skor <= 2 else "menguasai" if skor == 3 else "sangat menguasai"
         keterangan_label.config(text=f"Kategori: {keterangan.capitalize()}", fg="purple")
 
-        fieldnames = ['skor', 'keterangan']
-        dbcsv = {'skor': skor, 'keterangan': keterangan}
+        waktu = datetime.datetime.now()
+        get_waktu = (waktu.strftime("%X"))
+
+        fieldnames = ['skor', 'keterangan','waktu']
+        dbcsv = {'skor': skor, 'keterangan': keterangan,'waktu':get_waktu}
         filename = "data.csv"
         file_exists = os.path.exists(filename)
         with open(filename, "a", newline='') as csvfile:

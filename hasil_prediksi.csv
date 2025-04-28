@@ -1,23 +1,6 @@
-skor,keterangan,waktu,akurasi
-3,Menguasai,2025-04-25 21:43:30,100.00%
-5,Sangat Menguasai,2025-04-25 21:43:30,100.00%
-2,Kurang Menguasai,2025-04-25 21:43:30,100.00%
-4,Sangat Menguasai,2025-04-25 21:43:30,100.00%
-1,Kurang Menguasai,2025-04-25 21:43:30,100.00%
-5,Sangat Menguasai,2025-04-25 21:43:30,100.00%
-3,Menguasai,2025-04-25 21:43:30,100.00%
-5,Sangat Menguasai,2025-04-25 21:43:30,100.00%
-0,Kurang Menguasai,2025-04-25 21:43:30,100.00%
-4,Sangat Menguasai,2025-04-25 21:43:30,100.00%
-5,Sangat Menguasai,2025-04-25 21:43:30,100.00%
-4,Sangat Menguasai,2025-04-25 21:43:30,100.00%
-1,Kurang Menguasai,2025-04-25 21:43:30,100.00%
-1,Kurang Menguasai,2025-04-25 21:43:30,100.00%
-2,Kurang Menguasai,2025-04-25 21:43:30,100.00%
-1,Kurang Menguasai,2025-04-25 21:43:30,100.00%
-3,Menguasai,2025-04-25 21:43:30,100.00%
-3,Menguasai,2025-04-25 21:43:30,100.00%
-1,Kurang Menguasai,2025-04-25 21:43:30,100.00%
-5,Sangat Menguasai,2025-04-25 21:43:30,100.00%
-2,Kurang Menguasai,2025-04-25 21:43:30,100.00%
-5,Sangat Menguasai,2025-04-25 21:43:30,100.00%
+skor,keterangan,feedback,waktu_userinp,waktu_akurasi
+3,Memuaskan,"Hasil tes menunjukkan bahwa Anda memiliki kemampuan penglihatan warna yang cukup baik. Namun, mungkin ada beberapa kondisi atau warna yang masih cukup menantang untuk Anda. Kami sarankan untuk terus berlatih dan tetap menjaga kesehatan mata.",Tidak Tersedia,2025-04-28 15:23:07
+5,Sangat Memuaskan,Hasil tes menunjukkan bahwa kemampuan penglihatan warna Anda sangat baik. Anda dapat membedakan warna dengan jelas dan tajam dalam berbagai kondisi. Terus pertahankan penglihatan Anda dengan menjaga kesehatan mata secara rutin!,Tidak Tersedia,2025-04-28 15:23:07
+4,Sangat Memuaskan,Hasil tes menunjukkan bahwa kemampuan penglihatan warna Anda sangat baik. Anda dapat membedakan warna dengan jelas dan tajam dalam berbagai kondisi. Terus pertahankan penglihatan Anda dengan menjaga kesehatan mata secara rutin!,Tidak Tersedia,2025-04-28 15:23:07
+1,Kurang Memuaskan,Hasil tes menunjukkan bahwa Anda mengalami kesulitan dalam membedakan warna. Kami menyarankan agar Anda berkonsultasi dengan dokter spesialis mata untuk pemeriksaan lebih lanjut. Tes lebih lanjut dapat membantu mendapatkan diagnosis yang lebih akurat.,Tidak Tersedia,2025-04-28 15:23:07
+2,Kurang Memuaskan,Hasil tes menunjukkan bahwa Anda mengalami kesulitan dalam membedakan warna. Kami menyarankan agar Anda berkonsultasi dengan dokter spesialis mata untuk pemeriksaan lebih lanjut. Tes lebih lanjut dapat membantu mendapatkan diagnosis yang lebih akurat.,Tidak Tersedia,2025-04-28 15:23:07
