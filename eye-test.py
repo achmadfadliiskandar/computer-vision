@@ -6,6 +6,8 @@ from tkinter import messagebox
 import csv
 from tabulate import tabulate
 import datetime
+import pandas
+import subprocess
 
 # Tampilkan angka point(skor) jika benar
 jumlah_soal = 0
@@ -45,6 +47,38 @@ def randomsoal():
         input_entry.delete(0, ttk.END)
     else:
         print(f"File gambar tidak ditemukan: {soal['eyeimage']}")
+
+def feedback():
+    try:
+        # Menjalankan script python 'modelhashihara.py'
+        subprocess.run(['python', 'modelhashihara.py'], check=True)
+        # Membaca hasil_prediksi.csv
+        data_hasil = pandas.read_csv("hasil_prediksi.csv")
+        data_hasil.columns = data_hasil.columns.str.strip()
+        
+        # Pastikan file tidak kosong
+        if data_hasil.empty:
+            print("Tidak ada data feedback.")
+            return
+        
+        # Ambil baris terakhir
+        last_entry = data_hasil.iloc[-1]
+        
+        # Ambil feedback dan keterangan
+        feedback_last = last_entry["feedback"]
+        keterangan_last = last_entry["keterangan"]
+        
+        # Siapkan data untuk ditampilkan
+        table_data = [
+            ["Keterangan", keterangan_last],
+            ["Feedback", feedback_last]
+        ]
+        
+        # Menampilkan feedback dalam format tabel
+        print(tabulate(table_data, headers=["Kategori", "Isi"], tablefmt="grid"))
+    
+    except FileNotFoundError:
+        print("File 'hasil_prediksi.csv' tidak ditemukan.")
 
 def cek_jawaban():
     global skor, jumlah_soal
@@ -96,6 +130,7 @@ def cek_jawaban():
             print("Gambar terimakasih tidak ada")
 
         reset_button.pack(pady=10)
+        cek_feedback.pack(pady=20)
     else:
         randomsoal()
 
@@ -109,12 +144,13 @@ def reset_game():
     hasil_label.config(text="")
     keterangan_label.config(text="")
     reset_button.pack_forget()
+    cek_feedback.pack_forget()
     randomsoal()
 
 # GUI
 root = ttk.Tk()
 root.title("Test Hashihara")
-root.geometry("500x550")
+root.geometry("800x850")
 
 judul = ttk.Label(root, text="Test Buta Warna", font=("Helvetica", 18, "bold"))
 judul.pack(pady=10)
@@ -138,6 +174,9 @@ keterangan_label.pack()
 
 reset_button = ttk.Button(root, text="Reset", command=reset_game)
 reset_button.pack_forget()
+
+cek_feedback = ttk.Button(root, text="Get Feedback", command=feedback)
+cek_feedback.pack_forget()
 
 randomsoal()
 root.mainloop()

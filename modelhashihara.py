@@ -85,10 +85,13 @@ for index, row in data.iterrows():
 # Simpan ke hasil_prediksi.csv tanpa akurasi
 hasil = pd.DataFrame(results)
 
-# Cek apakah hasil_prediksi.csv sudah ada
-file_exists = os.path.exists("hasil_prediksi.csv")
 
-# Append data ke hasil_prediksi.csv dengan header jika file baru
-hasil.to_csv("hasil_prediksi.csv", index=False, mode='w', header=not file_exists)
+file_exists = os.path.exists("hasil_prediksi.csv")
+if not file_exists:
+    # Jika file belum ada, tulis file baru dengan header
+    hasil.to_csv("hasil_prediksi.csv", index=False, mode='w', header=True)
+else:
+    # Jika file sudah ada, append data tanpa menulis header lagi
+    hasil.to_csv("hasil_prediksi.csv", index=False, mode='w', header=True)
 
 print("Prediksi berhasil disimpan ke hasil_prediksi.csv")
