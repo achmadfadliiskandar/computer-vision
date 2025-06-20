@@ -1,0 +1,7 @@
+data: data.csv
+
+pages:
+  - title: Dashboard Coba
+    charts:
+      - type: table
+        title: Tabel Data

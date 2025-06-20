@@ -11,40 +11,50 @@ data = pd.read_csv("data.csv")
 # Label berdasarkan skor
 def get_label(skor):
     if skor <= 2:
-        return "Kurang Menguasai"
+        return "Kurang Memuaskan"
     elif skor == 3:
-        return "Menguasai"
+        return "Memuaskan"
     else:
-        return "Sangat Menguasai"
+        return "Sangat Memuaskan"
 
 data["label"] = data["skor"].apply(get_label)
 
-# Split & train
-X = data[["skor"]]  # Fitur (skor)
-y = data["label"]   # Label
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Fitur dan Label
+X = data[["skor"]]
+y = data["label"]
 
-# Membuat model dan melatihnya
+# Jika data kurang dari 2, tidak bisa split
+if len(data) < 2:
+    print("Jumlah data kurang dari 2. Model tetap dilatih, namun akurasi tidak dihitung.")
+    X_train = X
+    y_train = y
+    X_test = X
+    y_test = y
+    skip_accuracy = True
+else:
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    skip_accuracy = False
+
+# Melatih model
 model = RandomForestClassifier(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
-# Menghitung akurasi berdasarkan X_test dan y_test
-y_pred = model.predict(X_test)
-accuracy = accuracy_score(y_test, y_pred) * 100  # Akurasi dalam persen
+# Hitung akurasi jika memungkinkan
+if not skip_accuracy:
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred) * 100
+    print(f"Akurasi Model: {accuracy:.2f}%")
+else:
+    accuracy = None
 
-# Tampilkan akurasi di print
-print(f"Akurasi Model: {accuracy:.2f}%")
-
-# Simpan hasil prediksi untuk seluruh data tanpa akurasi
+# Proses prediksi dan feedback
 results = []
 for index, row in data.iterrows():
     skor_user = row["skor"]
-    
-    # Membuat DataFrame untuk prediksi yang konsisten dengan data pelatihan
-    X_new = pd.DataFrame([[skor_user]], columns=["skor"])  # Kolom "skor" harus sama
-    prediksi = model.predict(X_new)[0]  # Prediksi berdasarkan skor
-    
-    # Menentukan feedback berdasarkan skor
+    X_new = pd.DataFrame([[skor_user]], columns=["skor"])
+    prediksi = model.predict(X_new)[0]
+
+    # Feedback sesuai skor
     if skor_user <= 2:
         feedback = (
             "Hasil tes menunjukkan bahwa Anda mengalami kesulitan dalam membedakan warna. "
@@ -67,13 +77,10 @@ for index, row in data.iterrows():
         )
         keterangan = "Sangat Memuaskan"
 
-    # Menyimpan waktu prediksi
-    waktu_akurasi = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    # Mendapatkan waktu_userinp dari data.csv
-    waktu_userinp = row.get("waktu", "Tidak Tersedia")  # Mengambil waktu_userinp dari data.csv
 
-    # Menambahkan hasil ke dalam list
+    waktu_akurasi = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    waktu_userinp = row.get("waktu", "Tidak Tersedia")
+    # menerima hasil dari model
     results.append({
         "skor": skor_user,
         "keterangan": keterangan,
@@ -82,16 +89,7 @@ for index, row in data.iterrows():
         "waktu_akurasi": waktu_akurasi,
     })
 
-# Simpan ke hasil_prediksi.csv tanpa akurasi
+# Simpan hasil prediksi
 hasil = pd.DataFrame(results)
-
-
-file_exists = os.path.exists("hasil_prediksi.csv")
-if not file_exists:
-    # Jika file belum ada, tulis file baru dengan header
-    hasil.to_csv("hasil_prediksi.csv", index=False, mode='w', header=True)
-else:
-    # Jika file sudah ada, append data tanpa menulis header lagi
-    hasil.to_csv("hasil_prediksi.csv", index=False, mode='w', header=True)
-
+hasil.to_csv("hasil_prediksi.csv", index=False)
 print("Prediksi berhasil disimpan ke hasil_prediksi.csv")

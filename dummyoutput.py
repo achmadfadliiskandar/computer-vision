@@ -11,9 +11,9 @@ data_dummy = []
 for _ in range(jumlah_data):
     skor = random.randint(1, 5)
     keterangan = (
-        "kurang menguasai" if skor <= 2
-        else "menguasai" if skor == 3
-        else "sangat menguasai"
+        "kurang memuaskan" if skor <= 2
+        else "memuaskan" if skor == 3
+        else "sangat memuaskan"
     )
     waktu = datetime.datetime.now()
     get_waktu = (waktu.strftime("%X"))
