@@ -179,6 +179,9 @@ def export_to_pdf():
 def show_home():
     for widget in content_frame.winfo_children():
         widget.destroy()
+    # Hapus sidebar dari layar jika ada
+    sidebar.pack(side="left", fill="y")
+
 
     # Reset data logika saja
     global skor, jumlah_soal, soal_tersisa
@@ -281,7 +284,7 @@ def show_settings():
     def apply_settings():
         new_theme = theme_var.get()
         root.config(bg=new_theme)
-        # sidebar.config(bg=new_theme)
+        sidebar.config(bg=new_theme)  # Apply theme to sidebar as well
         content_frame.config(bg=new_theme)
 
     tk.Label(content_frame, text="Settings", font=("Helvetica", 16, "bold")).pack(pady=10)
@@ -292,30 +295,65 @@ def show_settings():
 
     tk.Button(content_frame, text="Change Settings", command=apply_settings).pack(pady=10)
 
+
+def start_application():
+    """Removes the start screen and shows the main application."""
+    for widget in root.winfo_children():
+        widget.destroy() # Clear all widgets from the root window
+
+    # Recreate sidebar and content_frame for the main application
+    global sidebar, content_frame
+    sidebar = tk.Frame(root, bg="#2c3e50", width=150)
+    sidebar.pack(side="left", fill="y")
+
+    btn_home = tk.Button(sidebar, text="Home", command=show_home, fg="white", bg="#34495e", relief="flat")
+    btn_home.pack(fill="x", pady=5, padx=5)
+
+    btn_visualisasi = tk.Button(sidebar, text="Dashboard", command=show_dashboard, fg="white", bg="#34495e", relief="flat")
+    btn_visualisasi.pack(fill="x", pady=5, padx=5)
+
+    btn_settings = tk.Button(sidebar, text="Pengaturan", command=show_settings, fg="white", bg="#34495e", relief="flat")
+    btn_settings.pack(fill="x", pady=5, padx=5)
+
+    content_frame = tk.Frame(root)
+    content_frame.pack(side="right", expand=True, fill="both")
+
+    show_home() # Now show the actual home screen of the application
+
+
+def show_start_screen():
+    """Displays the initial welcome screen with a start button."""
+    global content_frame # Make content_frame globally accessible to destroy its widgets
+
+    # Clear any existing widgets on the root window
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    # Create a new frame for the start screen content, taking up the whole window
+    start_frame = tk.Frame(root, bg="white")
+    start_frame.pack(expand=True, fill="both")
+
+    tk.Label(start_frame, text="Selamat Datang di Aplikasi Tes Buta Warna",
+             font=("Helvetica", 20, "bold"), bg="white").pack(pady=50)
+
+    start_button = tk.Button(start_frame, text="Mulai", command=start_application,
+                             font=("Helvetica", 16, "bold"), bg="#D9D9D9", fg="black",
+                             relief="raised", padx=20, pady=10)
+    start_button.pack(pady=30)
+
+
 # GUI Utama
 root = tk.Tk()
-root.title("Test Hashihara")
+root.title("Test Buta Warna")
 root.geometry("900x700")
 
-# Sidebar
-sidebar = tk.Frame(root, bg="#2c3e50", width=150)
-sidebar.pack(side="left", fill="y")
-
-btn_home = tk.Button(sidebar, text="Home", command=show_home, fg="white", bg="#34495e", relief="flat")
-btn_home.pack(fill="x", pady=5, padx=5)
-
-btn_visualisasi = tk.Button(sidebar, text="Dashboard", command=show_dashboard, fg="white", bg="#34495e", relief="flat")
-btn_visualisasi.pack(fill="x", pady=5, padx=5)
-
-btn_settings = tk.Button(sidebar, text="Pengaturan", command=show_settings, fg="white", bg="#34495e", relief="flat")
-btn_settings.pack(fill="x", pady=5, padx=5)
-
-# Area Konten
+# Initialize content_frame as a placeholder before it's properly defined in start_application
 content_frame = tk.Frame(root)
-content_frame.pack(side="right", expand=True, fill="both")
+# Initially, the sidebar is not packed, it will be packed by start_application
+sidebar = tk.Frame(root) # Placeholder, will be recreated later
 
-# Tampilkan halaman utama saat start
-show_home()
+# Tampilkan halaman mulai saat start
+show_start_screen()
 
 # tampilan mutlak program
 def on_exit():
