@@ -6,18 +6,22 @@ from datetime import datetime
 import os
 
 # --- Load data.csv ---
+if not os.path.exists("data.csv"):
+    print("Error: File 'data.csv' tidak ditemukan. Harap jalankan aplikasi utama untuk membuat data terlebih dahulu.")
+    exit()
+
 data = pd.read_csv("data.csv")
 
-# Label berdasarkan skor
-def get_label(skor):
-    if skor <= 2:
-        return "Kurang Memuaskan"
-    elif skor == 3:
-        return "Memuaskan"
-    else:
-        return "Sangat Memuaskan"
+# Mengubah data sesuai kebutuhan model
+def get_label(keterangan):
+    if keterangan == "buta warna total":
+        return "buta warna total"
+    elif keterangan == "buta warna parsial":
+        return "buta warna parsial"
+    else: # normal
+        return "normal"
 
-data["label"] = data["skor"].apply(get_label)
+data["label"] = data["keterangan"].apply(get_label)
 
 # Fitur dan Label
 X = data[["skor"]]
@@ -47,40 +51,41 @@ if not skip_accuracy:
 else:
     accuracy = None
 
-# Proses prediksi dan feedback
+# Proses prediksi dan feedback untuk semua data di CSV
 results = []
 for index, row in data.iterrows():
     skor_user = row["skor"]
     X_new = pd.DataFrame([[skor_user]], columns=["skor"])
+    # Menggunakan hasil prediksi model untuk menentukan kategori
     prediksi = model.predict(X_new)[0]
 
-    # Feedback sesuai skor
-    if skor_user <= 2:
+    # Menentukan feedback berdasarkan hasil prediksi model
+    if prediksi == "buta warna total":
+        keterangan = "buta warna total"
         feedback = (
             "Hasil tes menunjukkan bahwa Anda mengalami kesulitan dalam membedakan warna. "
             "Kami menyarankan agar Anda berkonsultasi dengan dokter spesialis mata untuk pemeriksaan lebih lanjut. "
             "Tes lebih lanjut dapat membantu mendapatkan diagnosis yang lebih akurat."
         )
-        keterangan = "Kurang Memuaskan"
-    elif skor_user == 3:
+    elif prediksi == "buta warna parsial":
+        keterangan = "buta warna parsial"
         feedback = (
             "Hasil tes menunjukkan bahwa Anda memiliki kemampuan penglihatan warna yang cukup baik. "
             "Namun, mungkin ada beberapa kondisi atau warna yang masih cukup menantang untuk Anda. "
             "Kami sarankan untuk terus berlatih dan tetap menjaga kesehatan mata."
         )
-        keterangan = "Memuaskan"
-    else:
+    else: # prediksi == "normal"
+        keterangan = "normal"
         feedback = (
             "Hasil tes menunjukkan bahwa kemampuan penglihatan warna Anda sangat baik. "
             "Anda dapat membedakan warna dengan jelas dan tajam dalam berbagai kondisi. "
             "Terus pertahankan penglihatan Anda dengan menjaga kesehatan mata secara rutin!"
         )
-        keterangan = "Sangat Memuaskan"
-
+        
 
     waktu_akurasi = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     waktu_userinp = row.get("waktu", "Tidak Tersedia")
-    # menerima hasil dari model
+    
     results.append({
         "skor": skor_user,
         "keterangan": keterangan,

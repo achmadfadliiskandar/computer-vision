@@ -8,32 +8,51 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
-# library' penting diatas
-
-# Data dan variabel global
+import joblib
+# =========================
+# Variabel Global & Konstanta
+# =========================
 jumlah_soal = 0
 skor = 0
-maks_soal = 5
+maks_soal = 24
 
-# kumpulan soal' untuk pengujian mata
+# =========================
+# Bank Soal
+# =========================
 list_soal = [
-    {"eyeimage": "eyeimage/tujuh.jpg", "jawaban": "7"},
+    {"eyeimage": "eyeimage/satu.png", "jawaban": "1"},
+    {"eyeimage": "eyeimage/tiga.png", "jawaban": "3"},
+    {"eyeimage": "eyeimage/empat.png", "jawaban": "4"},
+    {"eyeimage": "eyeimage/lima.png", "jawaban": "5"},
+    {"eyeimage": "eyeimage/enam.png", "jawaban": "6"},
+    {"eyeimage": "eyeimage/tujuh.png", "jawaban": "7"},
+    {"eyeimage": "eyeimage/delapan.png", "jawaban": "8"},
+    {"eyeimage": "eyeimage/sembilan.png", "jawaban": "9"},
     {"eyeimage": "eyeimage/duabelas.png", "jawaban": "12"},
-    {"eyeimage": "eyeimage/sembilanbelas.jpg", "jawaban": "19"},
+    {"eyeimage": "eyeimage/limabelas.png", "jawaban": "15"},
+    {"eyeimage": "eyeimage/enambelas.png", "jawaban": "16"},
+    {"eyeimage": "eyeimage/duasembilan.png", "jawaban": "29"},
+    {"eyeimage": "eyeimage/duaenam.png", "jawaban": "26"},
+    {"eyeimage": "eyeimage/tigalima.png", "jawaban": "35"},
+    {"eyeimage": "eyeimage/tigadelapan.png", "jawaban": "38"},
+    {"eyeimage": "eyeimage/empatdua.png", "jawaban": "42"},
+    {"eyeimage": "eyeimage/empatlima.png", "jawaban": "45"},
+    {"eyeimage": "eyeimage/limasatu.png", "jawaban": "51"},
+    {"eyeimage": "eyeimage/limatujuh.png", "jawaban": "57"},
+    {"eyeimage": "eyeimage/enamsembilan.png", "jawaban": "69"},
+    {"eyeimage": "eyeimage/tujuhtiga.png", "jawaban": "73"},
     {"eyeimage": "eyeimage/tujuhempat.png", "jawaban": "74"},
-    {"eyeimage": "eyeimage/sembilanenam.jpeg", "jawaban": "96"},
-    {"eyeimage": "eyeimage/dualima.png", "jawaban": "25"},
-    {"eyeimage": "eyeimage/enamlima.png", "jawaban": "65"},
-    {"eyeimage": "eyeimage/tigatiga.png", "jawaban": "33"},
-    {"eyeimage": "eyeimage/limatiga.png", "jawaban": "53"},
-    {"eyeimage": "eyeimage/sembilansembilan.png", "jawaban": "99"},
-    {"eyeimage": "eyeimage/empatpuluh.png", "jawaban": "40"},
-    {"eyeimage": "eyeimage/delapanempat.png", "jawaban": "84"},
-]
+    {"eyeimage": "eyeimage/sembilanenam.png", "jawaban": "96"},
+    {"eyeimage": "eyeimage/sembilantujuh.png", "jawaban": "97"}
 
+]
 soal_tersisa = list_soal.copy()
 
+# =========================
+# Random Soal
+# =========================
 def randomsoal():
+    """Tampilkan satu soal acak (tanpa pengulangan sampai habis)."""
     global img_tk, soal, soal_tersisa
     if not soal_tersisa:
         soal_tersisa = list_soal.copy()
@@ -47,7 +66,9 @@ def randomsoal():
         input_entry.delete(0, tk.END)
     else:
         print(f"Gambar tidak ditemukan: {soal['eyeimage']}")
-
+# =========================
+#  Cek Jawaban
+# =========================
 def cek_jawaban():
     global skor, jumlah_soal
     jawaban_user = input_entry.get()
@@ -66,8 +87,24 @@ def cek_jawaban():
         kotakjawaban.config(state="disabled")
         input_entry.config(state="disabled")
 
-        keterangan = "kurang memuaskan" if skor <= 2 else "memuaskan" if skor == 3 else "sangat memuaskan"
-        keterangan_label.config(text=f"Kategori: {keterangan.capitalize()}", fg="purple")
+        # --- Bagian Baru: Prediksi dengan Machine Learning Model ---
+        try:
+            # Muat model yang telah dilatih
+            model = joblib.load('color_vision_model.pkl')
+            # Prediksi kategori berdasarkan skor akhir
+            keterangan = model.predict([[skor]])[0]
+            keterangan_label.config(text=f"Kategori: {keterangan.capitalize()}", fg="purple")
+        except FileNotFoundError:
+            # Jika model tidak ditemukan, kembali ke logika if-else
+            if skor <= 9:
+                keterangan = "buta warna total"
+            elif 10 <= skor <= 21:
+                keterangan = "buta warna parsial"
+            elif 22 <= skor <= 24:
+                keterangan = "normal"
+            keterangan_label.config(text=f"Kategori: {keterangan.capitalize()}", fg="purple")
+            messagebox.showwarning("Model Error", "Model 'color_vision_model.pkl' tidak ditemukan. Menggunakan logika if-else.")
+        # --- Akhir Bagian Baru ---
 
         waktu = datetime.datetime.now().strftime("%X")
         filename = "data.csv"
@@ -82,21 +119,23 @@ def cek_jawaban():
             reader = csv.reader(file)
             data = list(reader)
         print(tabulate(data[1:], headers=data[0], tablefmt="grid"))
-
-
+        # tampilkan gambar terima kasih bila selesai
         if os.path.exists("eyeimage/terimakasih.png"):
             img = Image.open("eyeimage/terimakasih.png").resize((300, 300))
             img_tk = ImageTk.PhotoImage(img)
             image_label.config(image=img_tk)
             image_label.image = img_tk
-    # pengaturan ukuran reset button
+        # pengaturan ukuran reset button
         reset_button.pack(pady=10)
         cek_feedback.pack(pady=10)
 
     else:
         randomsoal()
-
+# =========================
+# Reset
+# =========================
 def reset_game():
+    """Reset nilai, enable input, dan tampilkan soal acak baru."""
     global skor, jumlah_soal, soal_tersisa
     skor = 0
     jumlah_soal = 0
@@ -107,10 +146,11 @@ def reset_game():
     keterangan_label.config(text="")
     reset_button.pack_forget()
     cek_feedback.pack_forget()
-
-    # lakukan random soal secara otomatis
     randomsoal()
 
+# =========================
+# Feedback (memanggil model eksternal)
+# =========================
 def feedback():
     try:
         subprocess.run(['python', 'modelhashihara.py'], check=True)
@@ -123,7 +163,9 @@ def feedback():
     except Exception as e:
         messagebox.showerror("Error", f"Gagal mendapatkan feedback: {e}")
 
-# Fungsi untuk mengekspor ke PDF
+# =========================
+# Export PDF (5 hasil terakhir)
+# =========================
 def export_to_pdf():
     try:
         filename = "hasil_tes_5_terakhir.pdf"
@@ -173,15 +215,13 @@ def export_to_pdf():
     except Exception as e:
         messagebox.showerror("Error", f"Gagal menyimpan ke PDF: {e}")
 
-
-
-# Fungsi untuk mengatur tampilan konten
+# =========================
+# !!! show_home
+# =========================
 def show_home():
     for widget in content_frame.winfo_children():
         widget.destroy()
-    # Hapus sidebar dari layar jika ada
     sidebar.pack(side="left", fill="y")
-
 
     # Reset data logika saja
     global skor, jumlah_soal, soal_tersisa
@@ -219,7 +259,7 @@ def show_home():
     # Panggil random soal terakhir setelah semua elemen GUI dibuat
     randomsoal()
 
-
+# show dashboard halaman dashboard
 def show_dashboard():
     for widget in content_frame.winfo_children():
         widget.destroy()
@@ -241,9 +281,9 @@ def show_dashboard():
         ax.set_ylabel("Jumlah")
         ax.set_xlabel("Kategori")
 
-        canvas = FigureCanvasTkAgg(fig, master=content_frame)
-        canvas.draw()
-        canvas.get_tk_widget().pack(pady=10)
+        canvas_widget = FigureCanvasTkAgg(fig, master=content_frame)
+        canvas_widget.draw()
+        canvas_widget.get_tk_widget().pack(pady=10)
 
         # --- TABEL RINGKASAN DATA ---
         tk.Label(content_frame, text="Ringkasan Data", font=("Helvetica", 14, "bold")).pack(pady=(20, 5))
@@ -253,7 +293,7 @@ def show_dashboard():
         tk.Label(header, text="Kategori", width=20, font=("Helvetica", 12, "bold")).pack(side="left", padx=5)
         tk.Label(header, text="Jumlah", width=10, font=("Helvetica", 12, "bold")).pack(side="left", padx=5)
 
-        for kategori in ["sangat memuaskan", "memuaskan", "kurang memuaskan"]:
+        for kategori in ["normal", "buta warna parsial", "buta warna total"]:
             jumlah = category_counts.get(kategori, 0)
             row = tk.Frame(content_frame)
             row.pack()
@@ -275,8 +315,7 @@ def show_dashboard():
     except Exception as e:
         tk.Label(content_frame, text=f"Terjadi kesalahan: {e}", font=("Helvetica", 12), fg="red").pack(pady=20)
 
-
-
+# show_settings halaman pengaturan
 def show_settings():
     for widget in content_frame.winfo_children():
         widget.destroy()
@@ -284,24 +323,23 @@ def show_settings():
     def apply_settings():
         new_theme = theme_var.get()
         root.config(bg=new_theme)
-        sidebar.config(bg=new_theme)  # Apply theme to sidebar as well
+        sidebar.config(bg=new_theme)
         content_frame.config(bg=new_theme)
 
     tk.Label(content_frame, text="Settings", font=("Helvetica", 16, "bold")).pack(pady=10)
-
     tk.Label(content_frame, text="Ubah Warna Tema:").pack()
     theme_var = tk.StringVar(value="white")
     tk.OptionMenu(content_frame, theme_var, "white", "lightgray", "lightblue", "lightgreen").pack(pady=5)
-
     tk.Button(content_frame, text="Change Settings", command=apply_settings).pack(pady=10)
 
-
+# =========================
+# Navigasi & Start Screen
+# =========================
 def start_application():
-    """Removes the start screen and shows the main application."""
+    """Hapus start screen, tampilkan aplikasi utama."""
     for widget in root.winfo_children():
-        widget.destroy() # Clear all widgets from the root window
+        widget.destroy()
 
-    # Recreate sidebar and content_frame for the main application
     global sidebar, content_frame
     sidebar = tk.Frame(root, bg="#2c3e50", width=150)
     sidebar.pack(side="left", fill="y")
@@ -318,18 +356,14 @@ def start_application():
     content_frame = tk.Frame(root)
     content_frame.pack(side="right", expand=True, fill="both")
 
-    show_home() # Now show the actual home screen of the application
-
+    show_home()
 
 def show_start_screen():
-    """Displays the initial welcome screen with a start button."""
-    global content_frame # Make content_frame globally accessible to destroy its widgets
-
-    # Clear any existing widgets on the root window
+    """Tampilkan layar awal dengan tombol Mulai."""
+    global content_frame
     for widget in root.winfo_children():
         widget.destroy()
 
-    # Create a new frame for the start screen content, taking up the whole window
     start_frame = tk.Frame(root, bg="white")
     start_frame.pack(expand=True, fill="both")
 
@@ -341,26 +375,22 @@ def show_start_screen():
                              relief="raised", padx=20, pady=10)
     start_button.pack(pady=30)
 
-
-# GUI Utama
+# =========================
+# Main Window
+# =========================
 root = tk.Tk()
 root.title("Test Buta Warna")
 root.geometry("900x700")
 
-# Initialize content_frame as a placeholder before it's properly defined in start_application
 content_frame = tk.Frame(root)
-# Initially, the sidebar is not packed, it will be packed by start_application
-sidebar = tk.Frame(root) # Placeholder, will be recreated later
+sidebar = tk.Frame(root)
 
-# Tampilkan halaman mulai saat start
 show_start_screen()
 
-# tampilan mutlak program
 def on_exit():
     if messagebox.askokcancel("Keluar", "Apakah Anda yakin ingin keluar dari aplikasi?"):
         plt.close('all')
         root.destroy()
 
-# Di akhir program
 root.protocol("WM_DELETE_WINDOW", on_exit)
 root.mainloop()
